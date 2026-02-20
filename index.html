@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orações | Momento de Fé</title>
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="top-cross">
+        <i class="fas fa-cross"></i>
+    </div>
+
+    <div class="main-container">
+        <div class="search-header">
+            <h1 class="search-title">Digite sua oração abaixo!</h1>
+        </div>
+
+        <div class="search-container">
+            <form class="search-box" onsubmit="handleSearch(event)">
+                <i class="fas fa-hands-praying search-icon"></i> 
+                <input type="text" class="search-input" placeholder="Escreva aqui sua oração..." id="searchInput" autocomplete="off">
+                <button type="submit" class="search-btn">
+                    Enviar
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function handleSearch(event) {
+            event.preventDefault();
+            const oracao = document.getElementById('searchInput').value;
+            if(oracao.trim() !== "") {
+                alert('Sua oração foi enviada com fé!');
+                document.getElementById('searchInput').value = "";
+            }
+        }
+    </script>
+</body>
+</html>s
