@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Orações | Momento de Fé</title>
+
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+        <style>
+            body {
+                align-items: flex-start;
+                overflow-y: auto;
+            }
+
+            .feed-container {
+                width: 100%;
+                max-width: 650px;
+                margin: 0 auto;
+                padding: 60px 20px 40px;
+                z-index: 1;
+                animation: fadeIn 1.5s ease-out;
+            }
+
+            .feed-header {
+                text-align: center;
+                margin-bottom: 35px;
+            }
+
+            .feed-title {
+                color: var(--brand-gold-dark);
+                font-weight: 700;
+                font-size: 2.2rem;
+                margin-bottom: 8px;
+            }
+
+            .feed-subtitle {
+                color: var(--text-secondary);
+                font-size: 0.95rem;
+            }
+
+            .back-link {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                color: var(--brand-gold);
+                text-decoration: none;
+                font-weight: 600;
+                margin-bottom: 30px;
+                transition: color 0.2s;
+            }
+
+            .back-link:hover {
+                color: var(--brand-gold-dark);
+            }
+
+            .pray-card {
+                background: var(--bg-secondary);
+                border: 1px solid var(--border-color);
+                border-radius: 50px;
+                padding: 18px 28px;
+                margin-bottom: 16px;
+                box-shadow: 0 10px 30px var(--shadow-color);
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+            }
+
+            .pray-card:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 15px 40px rgba(197, 160, 89, 0.25);
+            }
+
+            .pray-avatar {
+                width: 42px;
+                height: 42px;
+                background: var(--brand-gold);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-weight: 700;
+                font-size: 1rem;
+                flex-shrink: 0;
+            }
+
+            .pray-content {
+                flex: 1;
+            }
+
+            .pray-name {
+                font-weight: 600;
+                color: var(--text-primary);
+                font-size: 0.9rem;
+                margin-bottom: 3px;
+            }
+
+            .pray-text {
+                color: var(--text-secondary);
+                font-size: 0.95rem;
+                line-height: 1.5;
+            }
+
+            .pray-icon-right {
+                color: var(--brand-gold);
+                font-size: 1.1rem;
+                opacity: 0.6;
+                flex-shrink: 0;
+            }
+
+            .loading {
+                text-align: center;
+                color: var(--text-secondary);
+                padding: 40px;
+            }
+
+            .empty-state {
+                text-align: center;
+                color: var(--text-secondary);
+                padding: 60px 20px;
+                background: var(--bg-secondary);
+                border: 1px solid var(--border-color);
+                border-radius: 30px;
+            }
+
+            .empty-state i {
+                font-size: 2.5rem;
+                color: var(--brand-gold);
+                opacity: 0.4;
+                margin-bottom: 15px;
+                display: block;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div class="top-cross">
+            <i class="fas fa-cross"></i>
+        </div>
+
+        <div class="feed-container">
+            <a href="index.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> Enviar oração
+            </a>
+
+            <div class="feed-header">
+                <h1 class="feed-title">Orações da Comunidade</h1>
+                <p class="feed-subtitle">Cada oração enviada com fé 🙏</p>
+            </div>
+
+            <div id="feed">
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Carregando orações...
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const API_URL = 'https://project-prayer.onrender.com';
+
+            async function loadPrayers() {
+                const feed = document.getElementById('feed');
+
+                try {
+                    const response = await fetch(`${API_URL}/prayers`);
+                    const prayers = await response.json();
+
+                    if (prayers.length === 0) {
+                        feed.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-hands-praying"></i>
+                                Nenhuma oração enviada ainda. Seja o primeiro!
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    feed.innerHTML = prayers.map(p => `
+                        <div class="pray-card">
+                            <div class="pray-avatar">${p.name.charAt(0).toUpperCase()}</div>
+                            <div class="pray-content">
+                                <div class="pray-name">${p.name}</div>
+                                <div class="pray-text">${p.prayer}</div>
+                            </div>
+                            <i class="fas fa-hands-praying pray-icon-right"></i>
+                        </div>
+                    `).join('');
+
+                } catch (error) {
+                    feed.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-exclamation-circle"></i>
+                            Erro ao carregar orações.
+                        </div>
+                    `;
+                    console.error(error);
+                }
+            }
+
+            loadPrayers();
+        </script>
+    </body>
+</html>
