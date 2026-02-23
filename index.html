@@ -21,25 +21,48 @@
         </div>
 
         <div class="search-container">
-            <form class="search-box" onsubmit="handleSearch(event)">
-                <i class="fas fa-hands-praying search-icon"></i> 
-                <input type="text" class="search-input" placeholder="Escreva aqui sua oração..." id="searchInput" autocomplete="off">
-                <button type="submit" class="search-btn">
-                    Enviar
-                </button>
-            </form>
+<form class="search-box" onsubmit="handleSearch(event)">
+    <i class="fas fa-hands-praying search-icon"></i>
+    <div class="inputs">
+        <input type="text" class="search-input" placeholder="Seu nome..." id="nameInput" autocomplete="off">
+        <input type="text" class="search-input" placeholder="Escreva aqui sua oração..." id="searchInput" autocomplete="off">
+    </div>
+    <button type="submit" class="search-btn">Enviar</button>
+</form>
         </div>
     </div>
 
     <script>
-        function handleSearch(event) {
-            event.preventDefault();
-            const oracao = document.getElementById('searchInput').value;
-            if(oracao.trim() !== "") {
-                alert('Sua oração foi enviada com fé!');
-                document.getElementById('searchInput').value = "";
-            }
+        async function handleSearch(event) {
+    event.preventDefault();
+
+    const name = document.getElementById('nameInput').value.trim();
+    const prayer = document.getElementById('searchInput').value.trim();
+
+    if (name === "" || prayer === "") {
+        alert('Preencha seu nome e sua oração!');
+        return;
+    }
+
+    try {
+        const response = await fetch('http://127.0.0.1:8000/prayer', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, prayer })
+        });
+
+        if (response.ok) {
+            alert('Sua oração foi enviada com fé! 🙏');
+            document.getElementById('nameInput').value = "";
+            document.getElementById('searchInput').value = "";
+        } else {
+            alert('Erro ao enviar, tente novamente.');
         }
+    } catch (error) {
+        alert('Não foi possível conectar ao servidor.');
+        console.error(error);
+    }
+}
     </script>
 </body>
-</html>s
+</html>
