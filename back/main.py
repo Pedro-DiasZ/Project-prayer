@@ -35,3 +35,8 @@ def create_pray(pray: PraySchema, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(db_pray)
     return db_pray
+
+
+@app.get("/prayers")
+def get_prayers(db: Session = Depends(get_db)):
+    return db.query(models.Prayer).all()
