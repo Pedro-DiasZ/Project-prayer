@@ -16,6 +16,6 @@ app.add_middleware(
 async def root():
     return {"message": "API is running"}
 
-@app.post("/Prayer")
+@app.post("/prayer")
 def create_pray(pray: PraySchema):
     return pray
